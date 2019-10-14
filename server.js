@@ -4,7 +4,14 @@ const users = require('./routes/users');
 const bodyParser = require('body-parser');
 const mongoose = require('./config/database'); //database configuration
 const jwt = require('jsonwebtoken');
+const session = require('express-session');
 const app = express();
+
+const passport = require('passport');
+require('./middleware/passport')
+app.use(session({secret: 'iloveyou'})); // chuối bí mật đã mã hóa coookie
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.set('secretKey', 'nodeRestApi'); // jwt secret token
 
@@ -14,14 +21,17 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.get('/', function(req, res){
-res.json({"tutorial" : "Build REST API with node.js"});
+res.json({"1612278" : "Build REST API with node.js"});
 });
+
 // public route
-app.use('/users', users);
+app.use('/users',users);
+
 // private route
 app.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);
 });
+
 function validateUser(req, res, next) {
   jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded) {
     if (err) {
@@ -32,8 +42,8 @@ function validateUser(req, res, next) {
       next();
     }
   });
-  
 }
+
 // express doesn't consider not found 404 as an error so we need to handle 404 explicitly
 // handle 404 error
 app.use(function(req, res, next) {
@@ -41,6 +51,7 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
+
 // handle errors
 app.use(function(err, req, res, next) {
  console.log(err);
