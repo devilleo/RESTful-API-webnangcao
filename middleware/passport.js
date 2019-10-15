@@ -10,7 +10,9 @@ const JWTStrategy   = passportJWT.Strategy;
 const UserModel = require('../models/users')
 
 var secretKey = 'nodeRestApi';
-exports.secretKey = secretKey;
+module.exports = {
+    'secretKey': secretKey
+}
 
 // used to serialize the user for the session
 passport.serializeUser(function (user, done) {
@@ -58,7 +60,16 @@ passport.use(new JWTStrategy({
     jwtFromRequest : ExtractJWT.fromUrlQueryParameter('secret_token')
   }, async (token, done) => {
     try {
-      return done(null, token.user);
+        return UserModel.findById(token.user._id)
+        .then(user => {
+            if (!user) {
+                return done(null, false, {message: "Something's wrong"});
+            }
+            else {
+                return done(null,user)
+            }
+        })
+    //   return done(null, token.user);
     } catch (error) {
       done(error);
     }

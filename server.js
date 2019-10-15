@@ -15,9 +15,6 @@ app.use(session({secret: 'iloveyou'})); // chuối bí mật đã mã hóa coook
 app.use(passport.initialize());
 app.use(passport.session());
 
-const secretKey = require('./middleware/passport')
-app.set('secretKey', String(secretKey)); // jwt secret token
-
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -29,7 +26,7 @@ res.json({"1612278" : "Build REST API with node.js"});
 });
 
 // public route
-app.use('/', index);
+app.use('', index);
 app.use('/users',users);
 
 // private route

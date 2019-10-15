@@ -2,6 +2,8 @@ const userModel = require('../models/users');
 const bcrypt = require('bcrypt'); 
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const secretKey = require('../middleware/passport');
+
 
 module.exports = {
     create: function(req, res, next) {
@@ -50,7 +52,7 @@ module.exports = {
                  res.send(err);
              }
              const body = { _id : user._id, email : user.email };
-             const token = jwt.sign({user: body}, req.app.get('secretKey'), { expiresIn: '1h' });
+             const token = jwt.sign({user: body}, secretKey.secretKey, { expiresIn: '1h' });
              return res.json({status: "Login successful", token});
          });
      })

@@ -5,7 +5,7 @@ const passport = require('passport');
 
 router.get('/me', passport.authenticate('jwt', { session : false }), (req, res, next) => {
     res.json({
-        message : 'You made it to the secure route',
+        message : "Get User's Profile success !!!",
         user : req.user,
         token : req.query.secret_token
       })
