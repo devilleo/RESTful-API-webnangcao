@@ -2,12 +2,15 @@ const passport    = require('passport');
 const passportJWT = require("passport-jwt");
 const bcrypt = require('bcrypt'); 
 
-const ExtractJWT = passportJWT.ExtractJwt;
-
 const LocalStrategy = require('passport-local').Strategy;
+
+const ExtractJWT = passportJWT.ExtractJwt;
 const JWTStrategy   = passportJWT.Strategy;
+
 const UserModel = require('../models/users')
 
+var secretKey = 'nodeRestApi';
+exports.secretKey = secretKey;
 
 // used to serialize the user for the session
 passport.serializeUser(function (user, done) {
@@ -26,7 +29,7 @@ passport.use('local-login', new LocalStrategy({
         passwordField: 'password'
     },
     function (email, password, cb) {
-            return UserModel.findOne({'email': email})
+            return UserModel.findOne({email})
                 .then(user => {
                     if (!user) {
                         return cb(null, false, {message: 'Incorrect email or password.'});
@@ -51,18 +54,12 @@ passport.use('local-login', new LocalStrategy({
 ));
 
 passport.use(new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-        secretOrKey   : 'your_jwt_secret'
-    },
-    function (jwtPayload, cb) {
-
-        //find the user in db if needed
-        return UserModel.findOneById(jwtPayload.id)
-            .then(user => {
-                return cb(null, user);
-            })
-            .catch(err => {
-                return cb(err);
-            });
+    secretOrKey : secretKey,
+    jwtFromRequest : ExtractJWT.fromUrlQueryParameter('secret_token')
+  }, async (token, done) => {
+    try {
+      return done(null, token.user);
+    } catch (error) {
+      done(error);
     }
-));
+  }));

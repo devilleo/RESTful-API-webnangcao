@@ -36,10 +36,8 @@ module.exports = {
         }
        });
    },
-   login: function(req,res,next){
+   login: function(req,res){
       passport.authenticate('local-login', {session: false}, (err, user, info) => {
-         console.log(err);
-         console.log(info);
          if (err || !user) {
              return res.status(400).json({
                  message: info ? info.message : 'Login failed',
@@ -51,10 +49,9 @@ module.exports = {
              if (err) {
                  res.send(err);
              }
- 
-             const token = jwt.sign({id: user._id}, req.app.get('secretKey'), { expiresIn: '1h' });
- 
-             return res.json({status: "Login successful", user, token});
+             const body = { _id : user._id, email : user.email };
+             const token = jwt.sign({user: body}, req.app.get('secretKey'), { expiresIn: '1h' });
+             return res.json({status: "Login successful", token});
          });
      })
      (req, res);

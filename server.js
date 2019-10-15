@@ -1,9 +1,11 @@
 const express = require('express');
 const logger = require('morgan');
 const users = require('./routes/users');
+const index = require('./routes/index')
 const bodyParser = require('body-parser');
 const mongoose = require('./config/database'); //database configuration
 const jwt = require('jsonwebtoken');
+var cookieParser = require('cookie-parser');
 const session = require('express-session');
 const app = express();
 
@@ -13,18 +15,21 @@ app.use(session({secret: 'iloveyou'})); // chuối bí mật đã mã hóa coook
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.set('secretKey', 'nodeRestApi'); // jwt secret token
+const secretKey = require('./middleware/passport')
+app.set('secretKey', String(secretKey)); // jwt secret token
 
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
 app.get('/', function(req, res){
 res.json({"1612278" : "Build REST API with node.js"});
 });
 
 // public route
+app.use('/', index);
 app.use('/users',users);
 
 // private route
@@ -32,17 +37,17 @@ app.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);
 });
 
-function validateUser(req, res, next) {
-  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded) {
-    if (err) {
-      res.json({status:"error", message: err.message, data:null});
-    }else{
-      // add user id to request
-      req.body.userId = decoded.id;
-      next();
-    }
-  });
-}
+// function validateUser(req, res, next) {
+//   jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded) {
+//     if (err) {
+//       res.json({status:"error", message: err.message, data:null});
+//     }else{
+//       // add user id to request
+//       req.body.userId = decoded.id;
+//       next();
+//     }
+//   });
+// }
 
 // express doesn't consider not found 404 as an error so we need to handle 404 explicitly
 // handle 404 error
