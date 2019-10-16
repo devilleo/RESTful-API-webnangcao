@@ -63,6 +63,9 @@ app.use(function(err, req, res, next) {
   else 
     res.status(500).json({message: "Something looks wrong :( !!!"});
 });
-app.listen(3000, function(){
- console.log('Node server listening on port 3000');
+
+app.set( 'port', ( process.env.PORT || 5000 ));
+// Start node server
+app.listen(app.get( 'port' ), function(){
+ console.log('Node server listening on port ' + app.get( 'port' ));
 });
