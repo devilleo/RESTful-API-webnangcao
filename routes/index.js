@@ -7,7 +7,6 @@ router.get('/me', passport.authenticate('jwt', { session : false }), (req, res, 
     res.json({
         message : "Get User's Profile success !!!",
         user : req.user,
-        token : req.query.secret_token
       })
 });
 
