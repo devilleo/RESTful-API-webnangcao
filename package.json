@@ -15,7 +15,6 @@
     "express-session": "^1.17.0",
     "handlebars": "^4.4.3",
     "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.4",
