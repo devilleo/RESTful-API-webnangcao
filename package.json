@@ -16,11 +16,24 @@
     "handlebars": "^4.4.3",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.3.2",
+    "mongodb": "^3.3.3",
     "mongoose": "^5.7.4",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devilleo/RESTful-API-webnangcao.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devilleo/RESTful-API-webnangcao/issues"
+  },
+  "homepage": "https://github.com/devilleo/RESTful-API-webnangcao#readme",
+  "description": ""
 }
