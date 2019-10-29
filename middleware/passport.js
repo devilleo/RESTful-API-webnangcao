@@ -57,7 +57,7 @@ passport.use('local-login', new LocalStrategy({
 
 passport.use(new JWTStrategy({
     secretOrKey : secretKey,
-    jwtFromRequest : ExtractJWT.fromUrlQueryParameter('secret_token')
+    jwtFromRequest : ExtractJWT.fromHeader('secret_token')
   }, async (token, done) => {
     try {
         return UserModel.findById(token.user._id)
