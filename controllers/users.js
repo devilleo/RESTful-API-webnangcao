@@ -59,7 +59,15 @@ module.exports = {
      (req, res);
    },
    update: function(req,res){
-        userModel.findOneAndUpdate(req.email, req.body, (err) => {
+        userModel.findOneAndUpdate(req.email, 
+            {
+                firstName: req.firstName, 
+                lastName: req.lastName, 
+                address: req.address, 
+                city: req.city, 
+                country: req.country, 
+                aboutMe: req.aboutMe
+            }, (err) => {
             if (err){
                 return res.json({
                     message: "Something wrong makes update failure"
