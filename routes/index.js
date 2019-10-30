@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-// const indexController = require('../controllers/index');
+const userController = require('../controllers/users');
 const passport = require('passport');
 
 router.get('/me', passport.authenticate('jwt', { session : false }), (req, res, next) => {
@@ -9,5 +9,7 @@ router.get('/me', passport.authenticate('jwt', { session : false }), (req, res, 
         user : req.user,
       })
 });
+
+router.put('/me/update', passport.authenticate('jwt', { session : false }), userController.update);
 
 module.exports = router;

@@ -3,10 +3,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 var userSchema = mongoose.Schema({
-    name: {
-        type: String,
-        trim: true
-    },
     password: {
         type: String,
         required: true,
@@ -17,6 +13,30 @@ var userSchema = mongoose.Schema({
         type: String,
         trim: true,
         required: true
+    },
+    firstName: {
+        type: String,
+        trim: true
+    },
+    lastName: {
+        type: String,
+        trim: true
+    },
+    address: {
+        type: String,
+        trim: true
+    },
+    city: {
+        type: String,
+        trim: true
+    },
+    country: {
+        type: String,
+        trim: true
+    },
+    aboutMe: {
+        type: String,
+        trim: true
     },
     verify: {
         type: Boolean,
