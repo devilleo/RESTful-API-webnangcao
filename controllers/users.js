@@ -59,14 +59,14 @@ module.exports = {
      (req, res);
    },
    update: function(req,res){
-        userModel.findOneAndUpdate(req.email, 
+        userModel.findByIdAndUpdate(req.user._id, 
             {
-                firstName: req.firstName, 
-                lastName: req.lastName, 
-                address: req.address, 
-                city: req.city, 
-                country: req.country, 
-                aboutMe: req.aboutMe
+                firstName: req.body.firstName, 
+                lastName: req.body.lastName, 
+                address: req.body.address, 
+                city: req.body.city, 
+                country: req.body.country, 
+                aboutMe: req.body.aboutMe
             }, (err) => {
             if (err){
                 return res.json({
