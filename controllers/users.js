@@ -76,4 +76,18 @@ module.exports = {
             return res.json({message: "Update complete"})
         })
    },
+   changePassword: function(req, res){
+       userModel.findById(req.user._id,function(err, doc) {
+        if (err) return res.json({
+            message: "Something wrong makes change password failure"
+        });
+        if(!bcrypt.compareSync(req.body.oldPassword, doc.password)) {
+            return res.json({message: "Old password was wrong"
+            });
+        }
+        doc.password = req.body.newPassword;
+        doc.save();
+        return res.json({message: "Change password complete"})
+      }); 
+   },
 }

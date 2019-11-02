@@ -11,5 +11,6 @@ router.get('/me', passport.authenticate('jwt', { session : false }), (req, res, 
 });
 
 router.put('/me/update', passport.authenticate('jwt', { session : false }), userController.update);
+router.put('/me/changePassword', passport.authenticate('jwt', {session: false}), userController.changePassword)
 
 module.exports = router;
