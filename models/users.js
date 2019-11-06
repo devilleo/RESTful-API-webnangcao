@@ -42,7 +42,9 @@ var userSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    profilePicture: Buffer,
+    profilePicture: { 
+        type: String, 
+    },
     created: { 
         type: Date,
         default: Date.now
