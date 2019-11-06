@@ -67,7 +67,6 @@ module.exports = {
                 city: req.body.city, 
                 country: req.body.country, 
                 aboutMe: req.body.aboutMe,
-                profilePicture: req.body.file.path
             }, (err) => {
             if (err){
                 return res.json({
