@@ -20,7 +20,7 @@ module.exports = {
                 }
             }
         }
-        var idRoom = (new Date()) 
+        var idRoom = (new Date()).toISOString() 
         var newRoom = new Room(idRoom, 1, data,  {}, [], [], true, 0)
         listRooms.push(newRoom)
         console.log("current rooms: ", listRooms)
@@ -121,6 +121,41 @@ module.exports = {
         }
         listRooms.splice(index,1)
         console.log("list room sau khi xoa: ", listRooms)
+    },
+
+    undo: function(idRoom, isPlayer1SendThisRequestToReponseUndoRequest){
+        for (var i = 0; i < listRooms.length; i+=1){
+            if (listRooms[i].idRoom === idRoom){
+                if (listRooms[i].listSquareTogged.length >= 2){
+                    if (listRooms[i].listSquareTogged.length % 2 === 0){
+                        if (isPlayer1SendThisRequestToReponseUndoRequest === true){
+                            listRooms[i].listSquareTogged.pop()
+                            listRooms[i].currentTurn = false
+                            return
+                        }
+                        else{
+                            listRooms[i].listSquareTogged.pop()
+                            listRooms[i].listSquareTogged.pop()
+                            listRooms[i].currentTurn = true
+                            return
+                        }
+                    }
+                    else {
+                        if (isPlayer1SendThisRequestToReponseUndoRequest === true){
+                            listRooms[i].listSquareTogged.pop()
+                            listRooms[i].listSquareTogged.pop()
+                            listRooms[i].currentTurn = false
+                            return
+                        }
+                        else{
+                            listRooms[i].listSquareTogged.pop()
+                            listRooms[i].currentTurn = true
+                            return
+                        }
+                    }
+                }
+            }
+        }
     },
 
     outRoom: function(data){

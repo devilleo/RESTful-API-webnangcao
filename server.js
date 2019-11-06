@@ -21,7 +21,8 @@ const {
   setNumbersOfAcceptPlayAgain,
   getNumbersOfAcceptPlayAgain,
   resetNumbersOfAcceptPlayAgain,
-  eraseRoom
+  eraseRoom,
+  undo
 } = require('./config/socket')
 
 const passport = require('passport');
@@ -163,7 +164,56 @@ io.on('connection', socket => {
     eraseRoom(idRoom)
     io.sockets.in(idRoom).emit("response cancel finding room")
   })
+
+  socket.on("emit request undo", (idRoom, isPlayer1SendThisRequest) =>{
+    console.log("nhan duoc")
+    socket.broadcast.to(idRoom).emit("enemy request a undo")
+  })
+
+  socket.on("emit response undo request", (idRoom, isPlayer1SendThisRequestToReponseUndoRequest, isAccepted) => {
+    console.log("receive emit response undo request'")
+    const roomInfo = getInfoCurrentRoom(idRoom)
+
+    if (isAccepted === true){
+      undo(idRoom, isPlayer1SendThisRequestToReponseUndoRequest)
+      console.log("khaleo:... ", roomInfo)
+      socket.emit("response update square and current turn after accept undo", roomInfo)
+    }
+    socket.broadcast.to(idRoom).emit("response undo request", isAccepted, roomInfo)
+  })
   
+  socket.on("emit request tie", (idRoom, isPlayer1SendThisRequest) =>{
+    console.log("nhan duoc yeu cau xin hoa`")
+    socket.broadcast.to(idRoom).emit("enemy request a tie")
+  })
+
+  socket.on("emit response tie request", (idRoom, isPlayer1SendThisRequestToReponseTieRequest, isAccepted) => {
+    console.log("receive emit response tie request'")
+    const roomInfo = getInfoCurrentRoom(idRoom)
+
+    if (isAccepted === true){
+      resetGame(idRoom)
+      socket.emit("response reset game after accept tie")
+    }
+    socket.broadcast.to(idRoom).emit("response tie request", isAccepted, roomInfo)
+  })
+
+  socket.on("emit request lose", (idRoom, isPlayer1SendThisRequest) =>{
+    console.log("nhan duoc yeu cau xin thua")
+    socket.broadcast.to(idRoom).emit("enemy request a lose")
+  })
+
+  socket.on("emit response lose request", (idRoom, isPlayer1SendThisRequestToReponseLoseRequest, isAccepted) => {
+    console.log("receive emit response lose request'")
+    const roomInfo = getInfoCurrentRoom(idRoom)
+
+    if (isAccepted === true){
+      resetGame(idRoom)
+      socket.emit("response reset game after accept lose")
+    }
+    socket.broadcast.to(idRoom).emit("response lose request", isAccepted, roomInfo)
+  })
+
   // disconnect is fired when a client leaves the server
   socket.on('disconnect', () => {
     console.log('Client disconnected')
